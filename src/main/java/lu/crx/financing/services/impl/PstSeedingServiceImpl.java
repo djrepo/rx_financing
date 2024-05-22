@@ -1,19 +1,15 @@
-package lu.crx.financing.services;
+package lu.crx.financing.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import lu.crx.financing.entities.*;
-import lu.crx.financing.repositories.InvoiceBatchRepository;
+import lu.crx.financing.repositories.InvoiceRepository;
+import lu.crx.financing.services.SeedingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.ParameterizedPreparedStatementSetter;
-import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,7 +18,8 @@ import java.util.Set;
 
 @Slf4j
 @Service
-public class PstSeedingService extends BaseSeedingService {
+@Profile("pst")
+public class PstSeedingServiceImpl implements SeedingService {
 
     private EntityManager entityManager;
 
@@ -34,9 +31,9 @@ public class PstSeedingService extends BaseSeedingService {
     private List<Invoice> invoiceList;
 
     @Autowired
-    private InvoiceBatchRepository invoiceBatchRepository;
+    private InvoiceRepository invoiceRepository;
 
-    public PstSeedingService(EntityManager entityManager) {
+    public PstSeedingServiceImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
@@ -103,32 +100,11 @@ public class PstSeedingService extends BaseSeedingService {
                     .maturityDate(LocalDate.now().plusDays(randInt(1,100)))
                     .build();
             invoiceList.add(invoice);
-            /*entityManager.persist(invoice);
-            if (i%5000==0) {
-                log.info("Stored "+ i +" Invoices");
-                entityManager.flush();
-                entityManager.clear();
-            }*/
         }
 
-       invoiceBatchRepository.saveAll(invoiceList);
-
-
-/*
-        for (int i = 0; i< 20000000;i++) {
-            Invoice invoice = Invoice.builder()
-                    .creditor(randItem(creditorList))
-                    .debtor(randItem(debtorList))
-                    .valueInCents(randInt(1,10000000))
-                    .maturityDate(LocalDate.now().plusDays(randInt(1,100)))
-                    .build();
-            entityManager.persist(invoice);
-            if (i%5000==0) {
-                log.info("Stored "+ i +" Invoices");
-                entityManager.flush();
-                entityManager.clear();
-            }
-        }*/
+       invoiceRepository.saveAll(invoiceList);
+       entityManager.flush();
+       entityManager.clear();
     }
 
     private <T> T randItem(List<T> list){

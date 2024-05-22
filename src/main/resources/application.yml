@@ -1,9 +1,18 @@
 spring:
   profiles:
-    active: psql
+    active: h2-pst
+    group:
+      h2-basic: h2, basic
+      h2-pst: h2, pst
+      psql-basic: psql, basic
+      psql-pst: psql, pst
   jpa:
+    show-sql: false
+    format_sql: true
     generate-ddl: true
-    ddl-auto: update
+    ddl-auto: create-drop
     properties:
       hibernate:
-        jdbc.batch_size: 500
+        jdbc.batch_size: 5000
+        order_inserts: true
+        order_updates: true

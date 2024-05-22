@@ -10,8 +10,5 @@ import javax.transaction.Transactional;
 
 @Repository
 public interface CreditorRepository extends CrudRepository<Creditor, Long> {
-    @Modifying
-    @Transactional
-    @Query(value = "TRUNCATE TABLE Creditor", nativeQuery = true)
-    void truncateTable();
+
 }

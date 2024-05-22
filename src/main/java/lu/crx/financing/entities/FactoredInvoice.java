@@ -12,18 +12,22 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Financing {
+public class FactoredInvoice {
 
     @Id
     private long invoiceId;
-    @Basic(optional = false)
+    @Basic(optional = true)
     private long purchaserId;
     @Basic(optional = false)
     private LocalDate dateFulfilment;
-    @Basic(optional = false)
-    private int financingTerm;
-    @Basic(optional = false)
-    private int financingRate;
-    @Basic(optional = false)
+    @Basic(optional = true)
+    private long financingTerm;
+    @Basic(optional = true)
+    private long financingRate;
+    @Basic(optional = true)
     private long earlyPaymentAmount;
+    @Basic(optional = false)
+    private boolean isPayable;
+    @Basic(optional = false)
+    private boolean violatesCreditorMaxBps;
 }

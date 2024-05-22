@@ -9,9 +9,9 @@
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
   <groupId>lu.crx</groupId>
-  <artifactId>assignment-financing</artifactId>
+  <artifactId>assignment-factoredInvoice</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>assignment-financing</name>
+  <name>assignment-factoredInvoice</name>
   <description>Assignment: Financing algorithm</description>
 
   <properties>

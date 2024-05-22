@@ -1,9 +1,0 @@
-spring.jpa.generate-ddl=true
-spring.jpa.hibernate.ddl-auto=create
-spring.jpa.properties.hibernate.jdbc.batch_size=500
-spring.datasource.url=jdbc:postgresql://localhost:5432/postgres?currentSchema=public
-spring.datasource.jdbcUrl=jdbc:postgresql://localhost:5432/postgres?currentSchema=public
-spring.datasource.driverClassName=org.postgresql.Driver
-spring.datasource.username=postgres
-spring.datasource.password=admin
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect

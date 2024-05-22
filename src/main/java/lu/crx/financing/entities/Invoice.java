@@ -2,12 +2,8 @@ package lu.crx.financing.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,13 +30,16 @@ public class Invoice implements Serializable {
     /**
      * Creditor is the entity that issued the invoice.
      */
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "creditor_id")
+    @ManyToOne(targetEntity = Creditor.class, optional = false, fetch = FetchType.LAZY)
     private Creditor creditor;
 
+    @Column(name = "creditor_id", insertable = false, updatable = false)
+    private Long creditorId;
     /**
      * Debtor is the entity obliged to pay according to the invoice.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Debtor debtor;
 
     /**
