@@ -1,7 +1,7 @@
 package lu.crx.financing.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import lu.crx.financing.entities.*;
+import lu.crx.financing.model.entities.*;
 import lu.crx.financing.repositories.InvoiceRepository;
 import lu.crx.financing.services.SeedingService;
 import org.springframework.beans.factory.annotation.Autowired;

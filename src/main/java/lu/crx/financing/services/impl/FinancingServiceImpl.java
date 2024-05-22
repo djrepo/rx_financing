@@ -2,13 +2,16 @@ package lu.crx.financing.services.impl;
 
 import javax.transaction.Transactional;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import lu.crx.financing.entities.*;
+import lu.crx.financing.model.PurchaserSettings;
+import lu.crx.financing.model.entities.*;
 import lu.crx.financing.repositories.*;
 import lu.crx.financing.services.FactoredInvoiceService;
 import lu.crx.financing.services.FinancingService;
+import lu.crx.financing.services.components.CreditorCache;
+import lu.crx.financing.services.components.PurchaserCache;
+import lu.crx.financing.util.PurchaserFinder;
+import lu.crx.financing.util.PurchaserFinderFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,11 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @Slf4j
 @Service
@@ -35,8 +33,10 @@ public class FinancingServiceImpl implements FinancingService {
     private FactoredInvoiceService factoredInvoiceService;
 
     @Autowired
-    private PurchaserRepository purchaserRepository;
+    private PurchaserCache purchaserCache;
 
+    @Autowired
+    private CreditorCache creditorCache;
 
 
     @Transactional
@@ -49,49 +49,20 @@ public class FinancingServiceImpl implements FinancingService {
             return;
         }
 
-
+        creditorCache.invalidate();
+        purchaserCache.invalidate();
+        PurchaserFinderFactory purchaserFinderFactory = new PurchaserFinderFactory(LocalDate.now(),creditorCache, purchaserCache);
         log.info("Cache created");
         int batchNum = 0;
         while (invoices.size()>0) {
             batchNum++;
             log.info("Batch number "+batchNum+" started");
-            LocalDate now = LocalDate.now();
             List<FactoredInvoice> factoredInvoiceList = new ArrayList<>();
             for (Invoice invoice : invoices) {
-                long financialTerm = DAYS.between(now,invoice.getMaturityDate());
-                long creditorId = invoice.getCreditorId();
-                Creditor creditor = creditorMap.get(invoice.getCreditorId());
-                double minBps = Double.MAX_VALUE;
-                Purchaser bestPurchaser = null;
-                List<PurchaserSettings> purchaserSettingsList = creditorPurchaserSettingsMap.get(creditorId);
-                for (PurchaserSettings purchaserSettings : purchaserSettingsList) {
-                    double financingRate = financialTerm * purchaserSettings.annualRateInBps * 1.0 / 365;
-                    Purchaser purchaser = purchaserMap.get(purchaserSettings.purchaserId);
-                    if (financialTerm > purchaser.getMinimumFinancingTermInDays()) {
-                        if (financingRate < minBps) {
-                            minBps = financingRate;
-                            bestPurchaser = purchaser;
-                        }
-                    }
-                }
-                FactoredInvoice factoredInvoice = new FactoredInvoice();
-                factoredInvoice.setInvoiceId(invoice.getId());
-                factoredInvoice.setDateFulfilment(now);
-                factoredInvoice.setFinancingTerm(financialTerm);
-                factoredInvoice.setPayable(false);
-                factoredInvoice.setViolatesCreditorMaxBps(false);
-                if (bestPurchaser!=null) {
-                    factoredInvoice.setPurchaserId(bestPurchaser.getId());
-                    factoredInvoice.setFinancingRate(Math.round(minBps));
-                    factoredInvoice.setEarlyPaymentAmount(Math.round(invoice.getValueInCents() * (1 - minBps / 10000)));
-                }
-                if (minBps < creditor.getMaxFinancingRateInBps()) {
-                    factoredInvoice.setPayable(true);
-                }else {
-                    factoredInvoice.setViolatesCreditorMaxBps(true);
-                }
+                PurchaserFinder purchaserFinder = purchaserFinderFactory.createPurchaserFinder(invoice);
+                PurchaserSettings purchaserSettings = purchaserFinder.findPurchaserWithMinBps();
+                FactoredInvoice factoredInvoice = purchaserFinderFactory.createFactoredInvoice(purchaserFinder, purchaserSettings);
                 factoredInvoiceList.add(factoredInvoice);
-
             }
             factoredInvoiceService.saveAll(factoredInvoiceList);
             invoicePage = invoiceBatchRepository.findAllNotFinanced(PageRequest.of(1, 5000));
@@ -133,5 +104,7 @@ public class FinancingServiceImpl implements FinancingService {
 
 
     }
+
+
 
 }

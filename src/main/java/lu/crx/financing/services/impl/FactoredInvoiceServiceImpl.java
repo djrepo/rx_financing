@@ -1,16 +1,13 @@
 package lu.crx.financing.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import lu.crx.financing.entities.FactoredInvoice;
+import lu.crx.financing.model.entities.FactoredInvoice;
 import lu.crx.financing.repositories.FactoredInvoiceRepository;
 import lu.crx.financing.services.FactoredInvoiceService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import javax.xml.stream.events.EntityReference;
 import java.util.List;
 
 @Slf4j

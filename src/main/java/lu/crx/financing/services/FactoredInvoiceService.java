@@ -1,6 +1,6 @@
 package lu.crx.financing.services;
 
-import lu.crx.financing.entities.FactoredInvoice;
+import lu.crx.financing.model.entities.FactoredInvoice;
 
 import java.util.List;
 

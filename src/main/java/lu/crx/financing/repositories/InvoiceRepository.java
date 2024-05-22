@@ -1,6 +1,6 @@
 package lu.crx.financing.repositories;
 
-import lu.crx.financing.entities.Invoice;
+import lu.crx.financing.model.entities.Invoice;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

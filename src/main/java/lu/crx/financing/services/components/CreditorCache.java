@@ -1,11 +1,9 @@
-package lu.crx.financing.services;
+package lu.crx.financing.services.components;
 
-import lu.crx.financing.entities.Creditor;
+import lu.crx.financing.model.entities.Creditor;
 import lu.crx.financing.repositories.CreditorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -13,8 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Component
-@Scope(value = WebApplicationContext.SCOPE_APPLICATION)
-public class CreditorCacheService {
+public class CreditorCache {
 
 
     @Autowired
