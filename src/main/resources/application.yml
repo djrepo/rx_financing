@@ -16,6 +16,13 @@ spring:
         jdbc.batch_size: 5000
         order_inserts: true
         order_updates: true
-
+        default_batch_fetch_size: 500
+  datasource:
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
+      idle-timeout: 30000
+      connection-timeout: 30000
+      max-lifetime: 1800000
 crx:
   batch-size: 5000

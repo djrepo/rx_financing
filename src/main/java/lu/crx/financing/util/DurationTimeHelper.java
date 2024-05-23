@@ -1,8 +1,28 @@
 package lu.crx.financing.util;
 
-import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+@Slf4j
 public class DurationTimeHelper {
+
+    public static <T> T measured(Supplier<T> function,String caption) {
+        long start = System.nanoTime();
+        T result = function.get();
+        long stop = System.nanoTime();
+        log.info(caption + millisToShortDHMS(stop - start));
+        return result;
+    }
+
+    public static void measure(Runnable function,String caption) {
+        long start = System.nanoTime();
+        function.run();
+        long stop = System.nanoTime();
+        log.info(caption + millisToShortDHMS(stop - start));
+    }
 
     public static String millisToShortDHMS(long nanoDuration) {
         long duration = TimeUnit.NANOSECONDS.toMillis(nanoDuration);
