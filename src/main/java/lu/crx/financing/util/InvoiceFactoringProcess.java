@@ -22,6 +22,7 @@ public class InvoiceFactoringProcess {
         this.purchaserCache=purchaserCache;
     }
 
+
     private PurchaserFinder createPurchaserFinder(Invoice invoice){
         return PurchaserFinder.builder()
                 .invoice(invoice)
@@ -42,7 +43,6 @@ public class InvoiceFactoringProcess {
             factoredInvoice.setPurchaserId(purchaserInfo.getPurchaser().getId());
             factoredInvoice.setFinancingRate(purchaserInfo.getFinancingRate());
             factoredInvoice.setEarlyPaymentAmount(FactoredFinancingHelper.caclEarlyPaymentAmount(purchaserInfo));
-            factoredInvoice.setPayable(purchaserInfo.isPayable());
         }
         return factoredInvoice;
     }

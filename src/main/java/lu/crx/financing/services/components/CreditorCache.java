@@ -5,6 +5,7 @@ import lu.crx.financing.repositories.CreditorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -17,6 +18,11 @@ public class CreditorCache {
     @Autowired
     private CreditorRepository creditorRepository;
     private Map<Long, Creditor> creditorMap = null;
+
+    @Transactional
+    public void init(){
+        initCreditorMap();
+    }
 
     public void invalidate() {
         creditorMap = null;

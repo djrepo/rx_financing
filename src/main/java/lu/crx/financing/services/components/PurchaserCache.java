@@ -7,6 +7,7 @@ import lu.crx.financing.repositories.PurchaserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,6 +20,11 @@ public class PurchaserCache {
     private Map<Long, Purchaser> purchaserMap = null;
 
     private Map<Long, List<PurchaserCreditorBpsSettings>> creditorPurchaserSettingsMap = null;
+
+    @Transactional
+    public void init(){
+        initCache();
+    }
     public void invalidate() {
         purchaserMap = null;
         creditorPurchaserSettingsMap = null;

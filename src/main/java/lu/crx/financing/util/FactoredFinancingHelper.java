@@ -5,6 +5,7 @@ import lu.crx.financing.model.PurchaserInfo;
 import lu.crx.financing.model.entities.Creditor;
 import lu.crx.financing.model.entities.FactoredInvoice;
 import lu.crx.financing.model.entities.Invoice;
+import lu.crx.financing.model.entities.Purchaser;
 
 import java.time.LocalDate;
 
@@ -12,8 +13,8 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public class FactoredFinancingHelper {
 
-    public static boolean isFinancingTermViolatePurchaserSettings(PurchaserInfo purchaserInfo){
-        return purchaserInfo.getFinancingTerm() < purchaserInfo.getPurchaser().getMinimumFinancingTermInDays();
+    public static boolean isFinancingTermViolatePurchaserSettings(PurchaserInfo purchaserInfo, Purchaser purchaser){
+        return purchaserInfo.getFinancingTerm() < purchaser.getMinimumFinancingTermInDays();
     }
 
     public static boolean isFinancingRateViolatesCreditorSettings(PurchaserInfo purchaserInfo, Creditor creditor){

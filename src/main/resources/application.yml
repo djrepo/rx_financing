@@ -16,3 +16,6 @@ spring:
         jdbc.batch_size: 5000
         order_inserts: true
         order_updates: true
+
+crx:
+  batch-size: 5000

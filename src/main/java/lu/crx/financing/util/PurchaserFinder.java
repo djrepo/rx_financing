@@ -37,25 +37,16 @@ public class PurchaserFinder {
 
     public PurchaserInfo findFirstPayable(List<PurchaserInfo> sortedPurchaserInfos) {
         for (PurchaserInfo purchaserInfo : sortedPurchaserInfos) {
-            evaluatePurchaserInfos(purchaserInfo);
-            if (purchaserInfo.isPayable()){
+            if (isInvoicePayableByPurchaserInfos(purchaserInfo)){
                 return purchaserInfo;
             }
         }
         return null;
     }
 
-    private void evaluatePurchaserInfos(PurchaserInfo purchaserInfo) {
-        boolean isPayable = true;
-        if (FactoredFinancingHelper.isFinancingTermViolatePurchaserSettings(purchaserInfo)){
-            purchaserInfo.setViolatesPurchaserMinTerm(true);
-            isPayable = false;
-        }
-        if (FactoredFinancingHelper.isFinancingRateViolatesCreditorSettings(purchaserInfo, creditor)){
-            purchaserInfo.setViolatesCreditorSettings(true);
-            isPayable = false;
-        }
-        purchaserInfo.setPayable(isPayable);
+    private boolean isInvoicePayableByPurchaserInfos(PurchaserInfo purchaserInfo) {
+        return FactoredFinancingHelper.isFinancingTermViolatePurchaserSettings(purchaserInfo, purchaserInfo.getPurchaser()) &&
+               FactoredFinancingHelper.isFinancingRateViolatesCreditorSettings(purchaserInfo, creditor);
     }
 
 

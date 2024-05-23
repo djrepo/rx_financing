@@ -15,8 +15,5 @@ public class PurchaserInfo {
     private Purchaser purchaser;
     private double financingRate;
     private long financingTerm;
-    private boolean violatesPurchaserMinTerm;
-    private boolean violatesCreditorSettings;
-    private boolean isPayable;
 
 }

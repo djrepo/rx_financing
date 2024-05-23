@@ -1,5 +1,7 @@
 package lu.crx.financing.services.impl;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.transaction.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +12,7 @@ import lu.crx.financing.services.FactoredInvoiceService;
 import lu.crx.financing.services.FinancingService;
 import lu.crx.financing.services.components.CreditorCache;
 import lu.crx.financing.services.components.PurchaserCache;
+import lu.crx.financing.util.DurationTimeHelper;
 import lu.crx.financing.util.PurchaserFinder;
 import lu.crx.financing.util.InvoiceFactoringProcess;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +27,7 @@ import java.util.*;
 @Service
 public class FinancingServiceImpl implements FinancingService {
 
-    @Autowired
-    private InvoiceRepository invoiceBatchRepository;
-    @Autowired
-    private FactoredInvoiceService factoredInvoiceService;
+
 
     @Autowired
     private PurchaserCache purchaserCache;
@@ -35,34 +35,31 @@ public class FinancingServiceImpl implements FinancingService {
     @Autowired
     private CreditorCache creditorCache;
 
-    @Transactional
+    @Autowired
+    private BatchFinancingServiceImpl batchFinancingServiceImpl;
+
+
+
+    public void createCache(){
+            creditorCache.invalidate();
+            creditorCache.init();
+            purchaserCache.invalidate();
+            purchaserCache.init();
+    }
     public void finance() {
         log.info("Financing started");
-        Page<Invoice> invoicePage = invoiceBatchRepository.findAllNotFinanced(PageRequest.of(0,5000));
-        List<Invoice> invoices = invoicePage.stream().toList();
-        if (invoices.size()==0){
-            log.info("Nothing to do");
-            return;
-        }
-
-        creditorCache.invalidate();
-        purchaserCache.invalidate();
+        createCache();
         InvoiceFactoringProcess invoiceFactoringProcess = new InvoiceFactoringProcess(LocalDate.now(),creditorCache, purchaserCache);
-        log.info("Cache created");
+        log.info("Financing Cache created");
         int batchNum = 0;
-        while (invoices.size()>0) {
-            batchNum++;
+        int processedInvoices = 0;
+        do {
             log.info("Batch number "+batchNum+" started");
-            List<FactoredInvoice> factoredInvoiceList = new ArrayList<>();
-            for (Invoice invoice : invoices) {
-                FactoredInvoice factoredInvoice = invoiceFactoringProcess.finance(invoice);
-                factoredInvoiceList.add(factoredInvoice);
-            }
-            factoredInvoiceService.saveAll(factoredInvoiceList);
-            invoicePage = invoiceBatchRepository.findAllNotFinanced(PageRequest.of(1, 5000));
-            invoices = invoicePage.stream().toList();
-            log.info("Batch number "+batchNum+" finished");
-        }
+            processedInvoices = batchFinancingServiceImpl.financeBatch(invoiceFactoringProcess);
+            log.info("Batch number "+batchNum+" finished, processed "+processedInvoices);
+            batchNum++;
+        } while (processedInvoices>0);
+        log.info("Financing completed");
 
 
 //50 000 000 invoice
@@ -72,29 +69,6 @@ public class FinancingServiceImpl implements FinancingService {
 //10 000 unpaid, 1 000 000 already financed in 30 sec
 
 
-// natiahnem vsetky invoici do ciklu (50 000 000 invoicov)
-// pozrem kto je creditor a ake ma nastavenie
-// natiahnem vsetky banky do ciklu (50 000 bank)
-// pre kazdu banku vypocitam ci je vhodna, rozdiel dni medzi zaplatenim na dlh a zaplatenim skutocnym je vacsi ako minimum definovane bankou a
-// bps vypocitanie je mensie ako preferencia Creditor-a
-// Financing.dateFulfilment = today
-// Financing.financingTerm = numDays(Invoice.maturityDate - Financing.dateFulfilment)
-// if (Financing.financingTerm >= Purchaser.minimumFinancingTermInDays) {
-        // Financing.financingRate = Financing.financingTerm * Purchaser.annualRateInBps / 365  eg (30*50)/365 = 4.11 -> 4
-//          if (Financing.financingRate<Invoice.creditor.maxFinancingRateInBps) {
-//               if (Financing.financingRate < minimumFinancingRate) {
-//                  minimumFinancingRate = Financing.financingRate;
-//                  minPurchaser =  Purchaser
-//               }
-//            }
-// }
-
-// vyberem tu banku ktora ma bps najnizsie a poznacim ze zafinancuje invoice, poznacnie bude do zvlast tabulky kde bude informacia ktora banka kolko pozicia a s akym bps
-// Financing.purchaser = minPurchaser
-// Financing.earlyPaymentAmount = Invoice.valueInCents - (Invoice.valueInCents * Financing.financingRate/10000)
-        // TODO This is the financing algorithm that needs to be implemented according to the specification.
-
-        log.info("Financing completed");
 
 
     }
