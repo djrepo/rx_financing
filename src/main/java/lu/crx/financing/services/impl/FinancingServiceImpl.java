@@ -4,13 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import lu.crx.financing.services.FinancingService;
 import lu.crx.financing.services.components.CreditorCache;
 import lu.crx.financing.services.components.PurchaserCache;
-import lu.crx.financing.util.DurationTimeHelper;
 import lu.crx.financing.util.InvoiceFactoringProcess;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-import static lu.crx.financing.util.DurationTimeHelper.measure;
+import static lu.crx.financing.helpers.DurationTimeHelper.measure;
 
 @Slf4j
 @Service

@@ -16,8 +16,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static lu.crx.financing.util.DurationTimeHelper.measure;
-import static lu.crx.financing.util.DurationTimeHelper.measured;
+import static lu.crx.financing.helpers.DurationTimeHelper.measure;
+import static lu.crx.financing.helpers.DurationTimeHelper.measured;
 
 @Service
 @Slf4j

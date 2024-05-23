@@ -1,6 +1,7 @@
 package lu.crx.financing.util;
 
 import lombok.extern.slf4j.Slf4j;
+import lu.crx.financing.helpers.FactoredFinancingHelper;
 import lu.crx.financing.model.PurchaserInfo;
 import lu.crx.financing.model.entities.FactoredInvoice;
 import lu.crx.financing.model.entities.Invoice;
@@ -35,16 +36,17 @@ public class InvoiceFactoringProcess {
 
     private FactoredInvoice createFactoredInvoice(Invoice invoice, PurchaserInfo purchaserInfo) {
         FactoredInvoice factoredInvoice = FactoredInvoice.builder()
-                .isPayable(false)
+                .payable(false)
                 .createdOn(LocalDate.now())
                 .invoiceId(invoice.getId())
                 .build();
         if (purchaserInfo != null) {
+            factoredInvoice.setPayable(true);
             factoredInvoice.setFinancingTerm(purchaserInfo.getFinancingTerm());
             factoredInvoice.setFundingDate(fundingDate);
             factoredInvoice.setPurchaserId(purchaserInfo.getPurchaser().getId());
             factoredInvoice.setFinancingRate(purchaserInfo.getFinancingRate());
-            factoredInvoice.setEarlyPaymentAmount(FactoredFinancingHelper.caclEarlyPaymentAmount(purchaserInfo));
+            factoredInvoice.setEarlyPaymentAmount(FactoredFinancingHelper.calcEarlyPaymentAmount(purchaserInfo));
         }
         return factoredInvoice;
     }

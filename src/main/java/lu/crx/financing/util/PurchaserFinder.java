@@ -3,6 +3,7 @@ package lu.crx.financing.util;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lu.crx.financing.helpers.FactoredFinancingHelper;
 import lu.crx.financing.model.PurchaserCreditorBpsSettings;
 import lu.crx.financing.model.PurchaserInfo;
 import lu.crx.financing.model.entities.Creditor;

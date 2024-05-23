@@ -1,4 +1,4 @@
-package lu.crx.financing.util;
+package lu.crx.financing.helpers;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -20,7 +20,7 @@ public class FactoredInvoice {
     @Id
     private long invoiceId;
     @Basic(optional = false)
-    private boolean isPayable;
+    private boolean payable;
     @Basic(optional = false)
     private LocalDate createdOn;
 

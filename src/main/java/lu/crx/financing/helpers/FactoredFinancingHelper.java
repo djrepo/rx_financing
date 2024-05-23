@@ -1,4 +1,4 @@
-package lu.crx.financing.util;
+package lu.crx.financing.helpers;
 
 import lu.crx.financing.model.PurchaserCreditorBpsSettings;
 import lu.crx.financing.model.PurchaserInfo;
@@ -24,7 +24,7 @@ public class FactoredFinancingHelper {
         return financingTerm * purchaserCreditorBpsSettings.getAnnualRateInBps() * 1.0 / 365;
     }
 
-    public static long caclEarlyPaymentAmount(PurchaserInfo purchaserInfo) {
+    public static long calcEarlyPaymentAmount(PurchaserInfo purchaserInfo) {
         return Math.round(purchaserInfo.getInvoice().getValueInCents() * (1 - purchaserInfo.getFinancingRate() / 10000));
     }
 

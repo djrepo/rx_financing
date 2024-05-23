@@ -6,6 +6,7 @@ spring:
       h2-pst: h2, pst
       psql-basic: psql, basic
       psql-pst: psql, pst
+      test-basic: test, basic
   jpa:
     show-sql: false
     format_sql: true
