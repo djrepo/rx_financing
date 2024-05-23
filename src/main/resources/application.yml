@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: h2-basic
+    active: h2-pst
     group:
       h2-basic: h2, basic
       h2-pst: h2, pst
