@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lu.crx.financing.model.entities.Invoice;
 import lu.crx.financing.model.entities.Purchaser;
-import lu.crx.financing.util.FactoredFinancingHelper;
+
 @Getter
 @Setter
 @Builder

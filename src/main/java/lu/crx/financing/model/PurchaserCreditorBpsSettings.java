@@ -8,8 +8,8 @@ public class PurchaserCreditorBpsSettings {
     private Purchaser purchaser;
     private int annualRateInBps;
 
-    public PurchaserCreditorBpsSettings(Purchaser purchaser, int annualRateInBps){
+    public PurchaserCreditorBpsSettings(Purchaser purchaser, int annualRateInBps) {
         this.purchaser = purchaser;
-        this.annualRateInBps=annualRateInBps;
+        this.annualRateInBps = annualRateInBps;
     }
 }

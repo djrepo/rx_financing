@@ -1,15 +1,10 @@
 package lu.crx.financing.model.entities;
 
+import lombok.*;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.*;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * An invoice issued by the {@link Creditor} to the {@link Debtor} for shipped goods.

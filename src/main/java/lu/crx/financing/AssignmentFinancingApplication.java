@@ -1,7 +1,6 @@
 package lu.crx.financing;
 
 import lu.crx.financing.services.FinancingService;
-import lu.crx.financing.services.impl.FinancingServiceImpl;
 import lu.crx.financing.services.SeedingService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

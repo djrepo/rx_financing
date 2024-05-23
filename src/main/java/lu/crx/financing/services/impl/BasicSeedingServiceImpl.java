@@ -1,24 +1,21 @@
 package lu.crx.financing.services.impl;
 
-import java.time.LocalDate;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import lu.crx.financing.model.entities.Creditor;
-import lu.crx.financing.model.entities.Debtor;
-import lu.crx.financing.model.entities.Invoice;
-import lu.crx.financing.model.entities.Purchaser;
-import lu.crx.financing.model.entities.PurchaserFinancingSettings;
+import lu.crx.financing.model.entities.*;
 import lu.crx.financing.services.SeedingService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+import java.time.LocalDate;
 
 @Slf4j
 @Profile("basic")
 @Service
 public class BasicSeedingServiceImpl implements SeedingService {
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     private Creditor creditor1;
     private Creditor creditor2;
@@ -31,7 +28,6 @@ public class BasicSeedingServiceImpl implements SeedingService {
     private Purchaser purchaser1;
     private Purchaser purchaser2;
     private Purchaser purchaser3;
-
 
 
     public BasicSeedingServiceImpl(EntityManager entityManager) {

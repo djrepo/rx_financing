@@ -1,14 +1,9 @@
 package lu.crx.financing.model.entities;
 
-import java.io.Serializable;
-import javax.persistence.*;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Financing settings set by the purchaser for a specific creditor.

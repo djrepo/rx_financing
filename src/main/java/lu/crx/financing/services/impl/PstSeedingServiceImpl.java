@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import lu.crx.financing.model.entities.*;
 import lu.crx.financing.repositories.InvoiceRepository;
 import lu.crx.financing.services.SeedingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +20,8 @@ import java.util.Set;
 @Profile("pst")
 public class PstSeedingServiceImpl implements SeedingService {
 
-    private EntityManager entityManager;
-
+    private final EntityManager entityManager;
+    private InvoiceRepository invoiceRepository;
     private List<Creditor> creditorList;
 
     private List<Debtor> debtorList;
@@ -30,20 +29,19 @@ public class PstSeedingServiceImpl implements SeedingService {
     private List<Purchaser> purchaserList;
     private List<Invoice> invoiceList;
 
-    @Autowired
-    private InvoiceRepository invoiceRepository;
 
-    public PstSeedingServiceImpl(EntityManager entityManager) {
+    public PstSeedingServiceImpl(EntityManager entityManager, InvoiceRepository invoiceRepository) {
         this.entityManager = entityManager;
+        this.invoiceRepository = invoiceRepository;
     }
 
     @Transactional
     public void seedMasterData() {
         log.info("Seeding master data");
         creditorList = new ArrayList<>();
-        for (int i = 0; i< 1000;i++){
+        for (int i = 0; i < 1000; i++) {
             Creditor creditor = Creditor.builder()
-                    .name("Generic creditor "+i)
+                    .name("Generic creditor " + i)
                     .maxFinancingRateInBps(5)
                     .build();
             creditorList.add(creditor);
@@ -52,9 +50,9 @@ public class PstSeedingServiceImpl implements SeedingService {
 
         debtorList = new ArrayList<>();
         // debtors
-        for (int i = 0; i< 1000;i++){
+        for (int i = 0; i < 1000; i++) {
             Debtor debtor = Debtor.builder()
-                    .name("Generic debtor "+i)
+                    .name("Generic debtor " + i)
                     .build();
             debtorList.add(debtor);
             entityManager.persist(debtor);
@@ -62,7 +60,7 @@ public class PstSeedingServiceImpl implements SeedingService {
 
         // purchasers
         purchaserList = new ArrayList<>();
-        for (int i = 0; i< 1000;i++) {
+        for (int i = 0; i < 1000; i++) {
 
             Set<PurchaserFinancingSettings> bankSettings = new HashSet<>();
             for (Creditor creditor : creditorList) {
@@ -80,8 +78,8 @@ public class PstSeedingServiceImpl implements SeedingService {
             purchaser.setPurchaserFinancingSettings(bankSettings);
             purchaserList.add(purchaser);
             entityManager.persist(purchaser);
-            if (i%500==0) {
-                log.info("Stored "+ i +" Purchasers");
+            if (i % 500 == 0) {
+                log.info("Stored " + i + " Purchasers");
                 entityManager.flush();
                 entityManager.clear();
             }
@@ -92,22 +90,22 @@ public class PstSeedingServiceImpl implements SeedingService {
     public void seedInvoices() {
         log.info("Seeding the invoices");
         invoiceList = new ArrayList<>();
-        for (int i = 0; i< 200000;i++) {
+        for (int i = 0; i < 200000; i++) {
             Invoice invoice = Invoice.builder()
                     .creditor(randItem(creditorList))
                     .debtor(randItem(debtorList))
-                    .valueInCents(randInt(1,10000000))
-                    .maturityDate(LocalDate.now().plusDays(randInt(1,100)))
+                    .valueInCents(randInt(1, 10000000))
+                    .maturityDate(LocalDate.now().plusDays(randInt(1, 100)))
                     .build();
             invoiceList.add(invoice);
         }
 
-       invoiceRepository.saveAll(invoiceList);
-       entityManager.flush();
-       entityManager.clear();
+        invoiceRepository.saveAll(invoiceList);
+        entityManager.flush();
+        entityManager.clear();
     }
 
-    private <T> T randItem(List<T> list){
+    private <T> T randItem(List<T> list) {
         int index = randInt(0, list.size());
         return list.get(index);
     }

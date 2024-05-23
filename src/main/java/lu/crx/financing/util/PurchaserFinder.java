@@ -22,7 +22,7 @@ public class PurchaserFinder {
     private Creditor creditor;
     private LocalDate fundingDate;
 
-    public List<PurchaserInfo> getSortedPurchaserByBps(){
+    public List<PurchaserInfo> getSortedPurchaserByBps() {
         long financingTerm = FactoredFinancingHelper.calcFinancingTerm(invoice, fundingDate);
         List<PurchaserInfo> purchaserInfos = availablePurchasers.stream()
                 .map(p -> PurchaserInfo.builder()
@@ -37,7 +37,7 @@ public class PurchaserFinder {
 
     public PurchaserInfo findFirstPayable(List<PurchaserInfo> sortedPurchaserInfos) {
         for (PurchaserInfo purchaserInfo : sortedPurchaserInfos) {
-            if (isInvoicePayableByPurchaserInfos(purchaserInfo)){
+            if (isInvoicePayableByPurchaserInfos(purchaserInfo)) {
                 return purchaserInfo;
             }
         }
@@ -46,7 +46,7 @@ public class PurchaserFinder {
 
     private boolean isInvoicePayableByPurchaserInfos(PurchaserInfo purchaserInfo) {
         return FactoredFinancingHelper.isFinancingTermViolatePurchaserSettings(purchaserInfo, purchaserInfo.getPurchaser()) &&
-               FactoredFinancingHelper.isFinancingRateViolatesCreditorSettings(purchaserInfo, creditor);
+                FactoredFinancingHelper.isFinancingRateViolatesCreditorSettings(purchaserInfo, creditor);
     }
 
 

@@ -16,14 +16,15 @@ public class InvoiceFactoringProcess {
     private final LocalDate fundingDate;
     private final CreditorCache creditorCache;
     private final PurchaserCache purchaserCache;
-    public InvoiceFactoringProcess(LocalDate fundingDate, CreditorCache creditorCache, PurchaserCache purchaserCache){
+
+    public InvoiceFactoringProcess(LocalDate fundingDate, CreditorCache creditorCache, PurchaserCache purchaserCache) {
         this.fundingDate = fundingDate;
-        this.creditorCache=creditorCache;
-        this.purchaserCache=purchaserCache;
+        this.creditorCache = creditorCache;
+        this.purchaserCache = purchaserCache;
     }
 
 
-    private PurchaserFinder createPurchaserFinder(Invoice invoice){
+    private PurchaserFinder createPurchaserFinder(Invoice invoice) {
         return PurchaserFinder.builder()
                 .invoice(invoice)
                 .availablePurchasers(purchaserCache.getPurchaserSettingsByCreditorId(invoice.getCreditorId()))
@@ -31,13 +32,14 @@ public class InvoiceFactoringProcess {
                 .fundingDate(fundingDate)
                 .build();
     }
-    private FactoredInvoice createFactoredInvoice(Invoice invoice, PurchaserInfo purchaserInfo){
+
+    private FactoredInvoice createFactoredInvoice(Invoice invoice, PurchaserInfo purchaserInfo) {
         FactoredInvoice factoredInvoice = FactoredInvoice.builder()
                 .isPayable(false)
                 .createdOn(LocalDate.now())
                 .invoiceId(invoice.getId())
                 .build();
-        if (purchaserInfo !=null) {
+        if (purchaserInfo != null) {
             factoredInvoice.setFinancingTerm(purchaserInfo.getFinancingTerm());
             factoredInvoice.setFundingDate(fundingDate);
             factoredInvoice.setPurchaserId(purchaserInfo.getPurchaser().getId());
