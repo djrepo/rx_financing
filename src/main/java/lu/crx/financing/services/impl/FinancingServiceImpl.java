@@ -3,7 +3,7 @@ package lu.crx.financing.services.impl;
 import javax.transaction.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
-import lu.crx.financing.model.PurchaserSettings;
+import lu.crx.financing.model.PurchaserInfo;
 import lu.crx.financing.model.entities.*;
 import lu.crx.financing.repositories.*;
 import lu.crx.financing.services.FactoredInvoiceService;
@@ -11,7 +11,7 @@ import lu.crx.financing.services.FinancingService;
 import lu.crx.financing.services.components.CreditorCache;
 import lu.crx.financing.services.components.PurchaserCache;
 import lu.crx.financing.util.PurchaserFinder;
-import lu.crx.financing.util.PurchaserFinderFactory;
+import lu.crx.financing.util.InvoiceFactoringProcess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,9 +24,6 @@ import java.util.*;
 @Service
 public class FinancingServiceImpl implements FinancingService {
 
-
-
-
     @Autowired
     private InvoiceRepository invoiceBatchRepository;
     @Autowired
@@ -37,7 +34,6 @@ public class FinancingServiceImpl implements FinancingService {
 
     @Autowired
     private CreditorCache creditorCache;
-
 
     @Transactional
     public void finance() {
@@ -51,7 +47,7 @@ public class FinancingServiceImpl implements FinancingService {
 
         creditorCache.invalidate();
         purchaserCache.invalidate();
-        PurchaserFinderFactory purchaserFinderFactory = new PurchaserFinderFactory(LocalDate.now(),creditorCache, purchaserCache);
+        InvoiceFactoringProcess invoiceFactoringProcess = new InvoiceFactoringProcess(LocalDate.now(),creditorCache, purchaserCache);
         log.info("Cache created");
         int batchNum = 0;
         while (invoices.size()>0) {
@@ -59,9 +55,7 @@ public class FinancingServiceImpl implements FinancingService {
             log.info("Batch number "+batchNum+" started");
             List<FactoredInvoice> factoredInvoiceList = new ArrayList<>();
             for (Invoice invoice : invoices) {
-                PurchaserFinder purchaserFinder = purchaserFinderFactory.createPurchaserFinder(invoice);
-                PurchaserSettings purchaserSettings = purchaserFinder.findPurchaserWithMinBps();
-                FactoredInvoice factoredInvoice = purchaserFinderFactory.createFactoredInvoice(purchaserFinder, purchaserSettings);
+                FactoredInvoice factoredInvoice = invoiceFactoringProcess.finance(invoice);
                 factoredInvoiceList.add(factoredInvoice);
             }
             factoredInvoiceService.saveAll(factoredInvoiceList);

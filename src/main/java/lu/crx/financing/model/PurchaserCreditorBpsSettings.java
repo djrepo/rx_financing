@@ -1,15 +1,14 @@
 package lu.crx.financing.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lu.crx.financing.model.entities.Purchaser;
 
 @Getter
-public class PurchaserSettings {
+public class PurchaserCreditorBpsSettings {
     private Purchaser purchaser;
     private int annualRateInBps;
 
-    public PurchaserSettings(Purchaser purchaser, int annualRateInBps){
+    public PurchaserCreditorBpsSettings(Purchaser purchaser, int annualRateInBps){
         this.purchaser = purchaser;
         this.annualRateInBps=annualRateInBps;
     }

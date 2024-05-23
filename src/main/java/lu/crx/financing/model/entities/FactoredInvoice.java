@@ -16,18 +16,17 @@ public class FactoredInvoice {
 
     @Id
     private long invoiceId;
-    @Basic(optional = true)
-    private long purchaserId;
-    @Basic(optional = false)
-    private LocalDate dateFulfilment;
-    @Basic(optional = true)
-    private long financingTerm;
-    @Basic(optional = true)
-    private long financingRate;
-    @Basic(optional = true)
-    private long earlyPaymentAmount;
     @Basic(optional = false)
     private boolean isPayable;
     @Basic(optional = false)
-    private boolean violatesCreditorMaxBps;
+    private LocalDate createdOn;
+
+    private long purchaserId;
+    @Column(nullable = true)
+    private LocalDate fundingDate;
+    private long financingTerm;
+    private double financingRate;
+    private long earlyPaymentAmount;
+
+
 }

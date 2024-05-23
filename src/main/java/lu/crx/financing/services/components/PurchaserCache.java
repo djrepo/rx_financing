@@ -1,8 +1,6 @@
 package lu.crx.financing.services.components;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lu.crx.financing.model.PurchaserSettings;
+import lu.crx.financing.model.PurchaserCreditorBpsSettings;
 import lu.crx.financing.model.entities.Purchaser;
 import lu.crx.financing.model.entities.PurchaserFinancingSettings;
 import lu.crx.financing.repositories.PurchaserRepository;
@@ -20,7 +18,7 @@ public class PurchaserCache {
     private PurchaserRepository purchaserRepository;
     private Map<Long, Purchaser> purchaserMap = null;
 
-    private Map<Long, List<PurchaserSettings>> creditorPurchaserSettingsMap = null;
+    private Map<Long, List<PurchaserCreditorBpsSettings>> creditorPurchaserSettingsMap = null;
     public void invalidate() {
         purchaserMap = null;
         creditorPurchaserSettingsMap = null;
@@ -33,7 +31,7 @@ public class PurchaserCache {
         return purchaserMap.get(id);
     }
 
-    public List<PurchaserSettings> getPurchaserSettingsByCreditorId(long creditorId) {
+    public List<PurchaserCreditorBpsSettings> getPurchaserSettingsByCreditorId(long creditorId) {
         if (creditorPurchaserSettingsMap == null) {
             initCache();
         }
@@ -49,11 +47,11 @@ public class PurchaserCache {
         for (Purchaser purchaser : purchasers) {
             Set<PurchaserFinancingSettings> financingSettings = purchaser.getPurchaserFinancingSettings();
             for (PurchaserFinancingSettings financingSetting : financingSettings) {
-                List<PurchaserSettings> purchaserSettings = creditorPurchaserSettingsMap.get(financingSetting.getCreditorId());
+                List<PurchaserCreditorBpsSettings> purchaserSettings = creditorPurchaserSettingsMap.get(financingSetting.getCreditorId());
                 if (purchaserSettings == null){
                     creditorPurchaserSettingsMap.put(financingSetting.getCreditorId(),new ArrayList<>());
                 }
-                creditorPurchaserSettingsMap.get(financingSetting.getCreditorId()).add(new PurchaserSettings(purchaser,financingSetting.getAnnualRateInBps()));
+                creditorPurchaserSettingsMap.get(financingSetting.getCreditorId()).add(new PurchaserCreditorBpsSettings(purchaser,financingSetting.getAnnualRateInBps()));
             }
         }
     }
