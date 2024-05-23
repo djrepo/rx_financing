@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+import static lu.crx.financing.util.DurationTimeHelper.measure;
+
 @Slf4j
 @Service
 public class FinancingServiceImpl implements FinancingService {
@@ -32,22 +34,25 @@ public class FinancingServiceImpl implements FinancingService {
     }
 
     public void finance() {
+
         log.info("Financing started");
-        long start = System.nanoTime();
-        createCache();
-        InvoiceFactoringProcess invoiceFactoringProcess = new InvoiceFactoringProcess(LocalDate.now(), creditorCache, purchaserCache);
-        log.info("Financing Cache created");
-        int batchNum = 0;
-        long processedInvoices = 0;
-        do {
-            log.info("Batch number " + batchNum + " started");
-            processedInvoices = batchFinancingServiceImpl.financeBatch(invoiceFactoringProcess);
-            log.info("Batch number " + batchNum + " finished, processed " + processedInvoices);
-            batchNum++;
-        } while (processedInvoices > 0);
-        log.info("Financing completed");
-        long stop = System.nanoTime();
-        log.info("Financing take " + DurationTimeHelper.millisToShortDHMS(stop - start));
+        measure(()-> {
+                    createCache();
+                },"Cache load take ");
+        measure(()-> {
+                    InvoiceFactoringProcess invoiceFactoringProcess = new InvoiceFactoringProcess(LocalDate.now(), creditorCache, purchaserCache);
+                    log.info("Financing Cache created");
+                    int batchNum = 0;
+                    long processedInvoices = 0;
+                    do {
+                        log.info("Batch number " + batchNum + " started");
+                        processedInvoices = batchFinancingServiceImpl.financeBatch(invoiceFactoringProcess);
+                        log.info("Batch number " + batchNum + " finished, processed " + processedInvoices);
+                        batchNum++;
+                    } while (processedInvoices > 0);
+                    log.info("Financing completed");
+                },"Financing take ");
+
 
 //50 000 000 invoice
 

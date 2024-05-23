@@ -45,8 +45,8 @@ public class PurchaserFinder {
     }
 
     private boolean isInvoicePayableByPurchaserInfos(PurchaserInfo purchaserInfo) {
-        return FactoredFinancingHelper.isFinancingTermViolatePurchaserSettings(purchaserInfo, purchaserInfo.getPurchaser()) &&
-                FactoredFinancingHelper.isFinancingRateViolatesCreditorSettings(purchaserInfo, creditor);
+        return !FactoredFinancingHelper.isFinancingTermViolatePurchaserSettings(purchaserInfo, purchaserInfo.getPurchaser()) &&
+                !FactoredFinancingHelper.isFinancingRateViolatesCreditorSettings(purchaserInfo, creditor);
     }
 
 

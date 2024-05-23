@@ -19,7 +19,8 @@ import java.io.Serializable;
 public class Creditor implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "creditor_seq")
+    @SequenceGenerator(name = "creditor_seq", sequenceName = "creditor_id_seq", allocationSize = 1)
     private long id;
 
     @Basic(optional = false)

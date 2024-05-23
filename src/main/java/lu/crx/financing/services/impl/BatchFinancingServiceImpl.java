@@ -36,9 +36,10 @@ public class BatchFinancingServiceImpl implements BatchFinancingService {
 
     @Transactional
     public long financeBatch(InvoiceFactoringProcess invoiceFactoringProcess) {
-        Page<Invoice> invoicePage = measured(() ->
-                        invoiceRepository.findAllNotFinanced(PageRequest.of(0, batchSize))
-                , "Loading take ");
+        Page<Invoice> invoicePage =
+                measured(() ->
+                                invoiceRepository.findAllNotFinanced(PageRequest.of(0, batchSize))
+                        , "Loading take ");
         long invoicesSize = invoicePage.stream().count();
         if (invoicesSize == 0) {
             log.info("Nothing to do");

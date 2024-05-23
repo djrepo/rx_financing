@@ -20,7 +20,8 @@ import java.io.Serializable;
 public class Debtor implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "debtor_seq")
+    @SequenceGenerator(name = "debtor_seq", sequenceName = "debtor_id_seq", allocationSize = 1)
     private long id;
 
     @Basic(optional = false)

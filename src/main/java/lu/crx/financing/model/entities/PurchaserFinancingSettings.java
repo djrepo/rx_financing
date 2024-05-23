@@ -18,7 +18,8 @@ import java.io.Serializable;
 public class PurchaserFinancingSettings implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "purchaser_financing_settings_seq")
+    @SequenceGenerator(name = "purchaser_financing_settings_seq", sequenceName = "purchaser_financing_settings_id_seq", allocationSize = 1)
     private long id;
 
     @JoinColumn(name = "creditor_id")

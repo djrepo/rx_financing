@@ -19,7 +19,8 @@ import java.time.LocalDate;
 public class Invoice implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_seq")
+    @SequenceGenerator(name = "invoice_seq", sequenceName = "invoice_id_seq", allocationSize = 1)
     private long id;
 
     /**

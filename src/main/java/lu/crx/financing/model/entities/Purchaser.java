@@ -21,7 +21,8 @@ import java.util.Set;
 public class Purchaser implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "purchaser_seq")
+    @SequenceGenerator(name = "purchaser_seq", sequenceName = "purchaser_id_seq", allocationSize = 1)
     private long id;
 
     @Basic(optional = false)
