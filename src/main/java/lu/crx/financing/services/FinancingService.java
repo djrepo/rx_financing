@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import lu.crx.financing.services.components.CreditorCache;
 import lu.crx.financing.services.components.PurchaserCache;
 import lu.crx.financing.util.InvoiceFactoringProcess;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,7 +19,8 @@ public class FinancingService {
     private final CreditorCache creditorCache;
     private final BatchFinancingService batchFinancingService;
 
-    private final int MAX_NUMBER_OF_BATCHES = 1000000;
+    @Value("${crx.max-batch-iterations}")
+    private int maxBatchIterations;
 
     public FinancingService(PurchaserCache purchaserCache, CreditorCache creditorCache, BatchFinancingService batchFinancingServiceImpl) {
         this.purchaserCache = purchaserCache;
@@ -46,14 +48,14 @@ public class FinancingService {
                     log.info("Financing Cache created");
                     int batchNum = 0;
                     long totalProcessedInvoices = 0;
-                    while (totalProcessedInvoices < totalNotFinancedInvoices && batchNum<MAX_NUMBER_OF_BATCHES) {
+                    while (totalProcessedInvoices < totalNotFinancedInvoices && batchNum<maxBatchIterations) {
                         log.info("Batch number " + batchNum + " started");
                         long processedInvoices = batchFinancingService.financeBatch(invoiceFactoringProcess);
                         log.info("Batch number " + batchNum + " finished, processed " + processedInvoices);
                         totalProcessedInvoices = totalProcessedInvoices + processedInvoices;
                         batchNum++;
                     }
-                    if (batchNum >= MAX_NUMBER_OF_BATCHES){
+                    if (batchNum >= maxBatchIterations){
                         throw new RuntimeException("Number of batches too high.");
                     }
                     log.info("Financing completed");

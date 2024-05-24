@@ -27,3 +27,4 @@ spring:
       max-lifetime: 1800000
 crx:
   batch-size: 5000
+  max-batch-iterations: 1000000
