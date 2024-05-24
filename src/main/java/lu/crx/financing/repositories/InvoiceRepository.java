@@ -15,4 +15,9 @@ public interface InvoiceRepository extends CrudRepository<Invoice, Long> {
             "    order by i.id")
     Page<Invoice> findAllNotFinanced(Pageable pageable);
 
+    @Query("select count(i) " +
+            "    from Invoice i " +
+            "     where i.id not in (SELECT invoiceId from FactoredInvoice) ")
+    long countNotFinanced();
+
 }

@@ -3,6 +3,7 @@ package lu.crx.financing.services.impl;
 import lu.crx.financing.model.entities.FactoredInvoice;
 import lu.crx.financing.repositories.FactoredInvoiceRepository;
 import lu.crx.financing.services.FinancingService;
+import lu.crx.financing.services.SeedingService;
 import lu.crx.financing.util.CsvReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,12 +20,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
-@ActiveProfiles("test-basic")
-public class BatchFinancingServiceImplTest {
+@ActiveProfiles("h2test-basic")
+public class BatchFinancingServiceTest {
 
     @Autowired
-    private BasicSeedingServiceImpl seedingService;
+    private SeedingService seedingService;
     @Autowired
     private FinancingService financingService;
     @Autowired
@@ -37,7 +40,7 @@ public class BatchFinancingServiceImplTest {
         Iterable<FactoredInvoice> invoices = factoredInvoiceRepository.findAll();
         List<FactoredInvoice> currentFactoredInvoices = StreamSupport.stream(invoices.spliterator(), false).sorted(Comparator.comparingLong(FactoredInvoice::getInvoiceId)).collect(Collectors.toList());
         List<FactoredInvoice> expectedFactoredInvoices = loadExpectedFactoredInvoice();
-        Assertions.assertEquals(currentFactoredInvoices.size(), expectedFactoredInvoices.size());
+        assertEquals(currentFactoredInvoices.size(), expectedFactoredInvoices.size(),"Invoice list size differ");
         for (int i = 0;i<currentFactoredInvoices.size();i++){
             FactoredInvoice currentFactoredInvoice = currentFactoredInvoices.get(i);
             FactoredInvoice expectedFactoredInvoice = expectedFactoredInvoices.get(i);

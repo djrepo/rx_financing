@@ -1,12 +1,12 @@
 spring:
   profiles:
-    active: h2-basic
+    active: h2test-basic
     group:
       h2-basic: h2, basic
       h2-pst: h2, pst
       psql-basic: psql, basic
       psql-pst: psql, pst
-      test-basic: test, basic
+      h2test-basic: h2test, basic
   jpa:
     show-sql: false
     format_sql: true

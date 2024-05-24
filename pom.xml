@@ -20,6 +20,26 @@
     <maven.compiler.target>17</maven.compiler.target>
   </properties>
 
+  <profiles>
+    <profile>
+      <id>local</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <spring.profiles.active>h2-basic</spring.profiles.active>
+        <packaging.type>jar</packaging.type>
+      </properties>
+    </profile>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <spring.profiles.active>psql-basic</spring.profiles.active>
+        <packaging.type>jar</packaging.type>
+      </properties>
+    </profile>
+  </profiles>
+
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
