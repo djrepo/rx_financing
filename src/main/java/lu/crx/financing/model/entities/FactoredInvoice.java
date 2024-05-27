@@ -28,7 +28,7 @@ public class FactoredInvoice {
     @Column(nullable = true)
     private LocalDate fundingDate;
     private long financingTerm;
-    private double financingRate;
+    private long financingRate;
     private long earlyPaymentAmount;
 
 

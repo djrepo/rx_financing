@@ -3,16 +3,12 @@
 In order to build and test application run:</br>
 <code>mvn clean package</code></br>
 Once jar file is created you can run it</br>
-<code>java target/assignment-factoredInvoice-0.0.1-SNAPSHOT.jar</code>
-
-## Maven profiles:
-* local - this profile is active by default, it activates spring profile h2-basic
-* dev - this profile can be activated by -P in command e.g. mvn clean package -Pdev, it activates spring profile psql-basic
+<code>java -Dspring.profiles.active=h2-basic -jar target/assignment-factoredInvoice-0.0.1-SNAPSHOT.jar</code>
 
 ## Database connections :
-In these files are defined jdbc connections application-h2.yml application-psql.yml application-h2test.yml
+In these files are defined jdbc connections application-h2.yml application-psql.yml application-h2mem.yml
 * h2 - database is stored in file test.mv.db, you are free to manually remove this file whenever you need fresh empty db
-* h2test - database is stored in memory, after application finish data are lost
+* h2mem - database is stored in memory, after application finish data are lost
 * psql - preinstalled postgresSql database, you need to edit this file according to your environment
 
 ## Data Seeding :
@@ -22,18 +18,21 @@ Program at startup create database schema and fill example data to created table
         it is created by randomly generated data
 
 ## Spring profile activation:
-Activation is done in application.yml file with property spring.profiles.active. You can edit this property manually or maven can substitute this value in maven build
+Activation is done in application.yml file with environment property spring.profiles.active. 
+You can edit this property by specify environment variable or manually directly in file
 * h2-basic - this profile will use h2 db connection and data set option basic
 * h2-pst - this profile will use h2 db connection and data set option pst
 * psql-basic - this profile will use psql db connection and data set option basic
 * psql-pst - this profile will use psql db connection and data set option pst
-* h2test-basic - this profile will use h2test db connection and data set option basic,
-                 it is active for integration test and it will prevent normal run of application,
-                 instead of seeding data and running financing by application itself, junit will define what to do
+There is two profiles used in integration test
+* h2mem - this profile will use h2mem db connection, it is active for integration test 
+* junit - this profile will prevent normal run of application,
+          instead of seeding data and running financing by application itself, junit test class will define what to do
 
 ## Batch settings:
 Invoice table can be huge therefore program is financing invoices in a smaller batches.
-You can change batch size with property crx.batch-size in application.yml file.
+You can change batch size with property <code>crx.batch-size</code> in application.yml file. 
+In order to prevent long calculations there is another variable <code>crx.max-batch-iterations</code>. By this variable you can control number of batch-es run in one call.
 
 # Solution descriptions:
 Method <code>FinancingService.finance()</code> is the entry point where entire process of financing Invoices started.

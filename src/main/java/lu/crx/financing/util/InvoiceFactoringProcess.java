@@ -45,8 +45,8 @@ public class InvoiceFactoringProcess {
             factoredInvoice.setFinancingTerm(purchaserInfo.getFinancingTerm());
             factoredInvoice.setFundingDate(fundingDate);
             factoredInvoice.setPurchaserId(purchaserInfo.getPurchaser().getId());
-            factoredInvoice.setFinancingRate(purchaserInfo.getFinancingRate());
-            factoredInvoice.setEarlyPaymentAmount(FactoredFinancingHelper.calcEarlyPaymentAmount(purchaserInfo));
+            factoredInvoice.setFinancingRate(Math.round(purchaserInfo.getFinancingRate()));
+            factoredInvoice.setEarlyPaymentAmount(FactoredFinancingHelper.calcEarlyPaymentAmount(purchaserInfo, factoredInvoice.getFinancingRate()));
         }
         return factoredInvoice;
     }

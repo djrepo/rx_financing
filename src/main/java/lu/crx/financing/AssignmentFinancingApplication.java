@@ -16,7 +16,7 @@ public class AssignmentFinancingApplication {
     }
 
     @Bean
-    @Profile("!h2test-basic")
+    @Profile("!junit")
     public CommandLineRunner run(
             SeedingService seedingService,
             FinancingService financingService) {

@@ -23,7 +23,7 @@ import java.util.stream.StreamSupport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-@ActiveProfiles("h2test-basic")
+@ActiveProfiles({"h2mem","basic","junit"})
 public class BatchFinancingServiceTest {
 
     @Autowired

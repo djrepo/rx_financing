@@ -24,8 +24,8 @@ public class FactoredFinancingHelper {
         return financingTerm * purchaserCreditorBpsSettings.getAnnualRateInBps() * 1.0 / 365;
     }
 
-    public static long calcEarlyPaymentAmount(PurchaserInfo purchaserInfo) {
-        return Math.round(purchaserInfo.getInvoice().getValueInCents() * (1 - purchaserInfo.getFinancingRate() / 10000));
+    public static long calcEarlyPaymentAmount(PurchaserInfo purchaserInfo, long financingRate) {
+        return Math.round(purchaserInfo.getInvoice().getValueInCents() * (1 - financingRate * 1.0 / 10000));
     }
 
     public static long calcFinancingTerm(Invoice invoice, LocalDate fundingDate) {

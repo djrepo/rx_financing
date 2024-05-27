@@ -20,26 +20,6 @@
     <maven.compiler.target>17</maven.compiler.target>
   </properties>
 
-  <profiles>
-    <profile>
-      <id>local</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <spring.profiles.active>h2-basic</spring.profiles.active>
-        <packaging.type>jar</packaging.type>
-      </properties>
-    </profile>
-    <profile>
-      <id>dev</id>
-      <properties>
-        <spring.profiles.active>psql-basic</spring.profiles.active>
-        <packaging.type>jar</packaging.type>
-      </properties>
-    </profile>
-  </profiles>
-
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -55,12 +35,6 @@
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
 
